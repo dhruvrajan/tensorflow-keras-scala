@@ -1,10 +1,19 @@
+import org.tensorflow.keras.activations.Activations
+import org.tensorflow.keras.datasets.FashionMNIST
+import org.tensorflow.keras.examples.fashionMnist.FashionMNISTKeras
+import org.tensorflow.keras.models.{Model, Sequential}
 import org.tensorflow.keras.scala.Layers
 
-import org.tensorflow.keras.activations.{Activations}
-import org.tensorflow.keras.initializers.{Initializers}
 object Main {
 
   def main(args: Array[String]): Unit = {
-    Layers.dense(10, biasInitializer=Initializers.zeros, activation=)
+    val model: Model[java.lang.Float] = Sequential.of(
+      Layers.input(28, 28),
+      Layers.flatten(28 * 28),
+      Layers.dense(128, activation = Activations.relu),
+      Layers.dense(10, activation = Activations.softmax)
+    )
+
+    FashionMNISTKeras.train(model)
   }
 }
