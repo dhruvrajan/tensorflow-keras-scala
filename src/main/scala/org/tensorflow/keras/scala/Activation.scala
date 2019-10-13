@@ -1,8 +1,8 @@
 package org.tensorflow.keras.scala
 
+import scala.language.implicitConversions
 import org.tensorflow.keras.activations.{Activations, Activation => JActivation}
 
-import scala.language.implicitConversions
 
 case class Activation[T <: java.lang.Number](self: JActivation[T])
 

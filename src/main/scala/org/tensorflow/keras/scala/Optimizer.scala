@@ -1,8 +1,7 @@
 package org.tensorflow.keras.scala
 
-import org.tensorflow.keras.optimizers.{Optimizers, Optimizer => JOptimizer}
-
 import scala.language.implicitConversions
+import org.tensorflow.keras.optimizers.{Optimizers, Optimizer => JOptimizer}
 
 case class Optimizer[T <: java.lang.Number](self: JOptimizer[T])
 

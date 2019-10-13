@@ -1,8 +1,7 @@
 package org.tensorflow.keras.scala
 
-import org.tensorflow.keras.metrics.{Metrics, Metric => JMetrc}
-
 import scala.language.implicitConversions
+import org.tensorflow.keras.metrics.{Metrics, Metric => JMetrc}
 
 case class Metric(self: JMetrc)
 
