@@ -1,8 +1,7 @@
 package org.tensorflow.keras.scala
 
-import org.tensorflow.keras.losses.{Losses, Loss => JLoss}
-
 import scala.language.implicitConversions
+import org.tensorflow.keras.losses.{Losses, Loss => JLoss}
 
 case class Loss(self: JLoss)
 
