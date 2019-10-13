@@ -1,10 +1,10 @@
-import scala.language.implicitConversions
-import org.tensorflow.keras.scala.layers._
-import org.tensorflow.keras.activations.{Activations, Activation};
+import org.tensorflow.keras.scala.Layers
 
+import org.tensorflow.keras.activations.{Activations}
+import org.tensorflow.keras.initializers.{Initializers}
 object Main {
 
   def main(args: Array[String]): Unit = {
-    layers.dense(10, Activations.linear)
+    Layers.dense(10, biasInitializer=Initializers.zeros, activation=)
   }
 }

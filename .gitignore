@@ -1,0 +1,37 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+*~
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+out/
+.idea/
+.idea_modules/
+
+# Java
+*.class
+*.log
+.mtj.tmp/
+*.jar
+*.war
+*.ear
+
+# sbt
+cache/
+.history/
+.lib/
+dist/
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+.metals/
+.bloop/
