@@ -1,4 +1,3 @@
-import Main.model
 import org.tensorflow.Graph
 import org.tensorflow.data.GraphLoader
 import org.tensorflow.keras.activations.Activations
@@ -11,9 +10,7 @@ import org.tensorflow.keras.scala.{Layers, Model}
 import org.tensorflow.op.Ops
 import org.tensorflow.utils.Pair
 
-
 object Main {
-
   val model: Model[java.lang.Float] = Sequential.of(
     Layers.input(28, 28),
     Layers.flatten(28 * 28),
