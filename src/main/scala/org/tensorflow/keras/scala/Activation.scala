@@ -8,8 +8,7 @@ import org.tensorflow.keras.activations.{Activations, Activation => JActivation}
 case class Activation[T <: java.lang.Number](self: JActivation[T])
 
 object Activation {
-    implicit def convert(a: Activations): Activation[java.lang.Float] =
-        Activation(Activations.select(a))
+    implicit def convert(a: Activations): Activation[java.lang.Float] = Activation[java.lang.Float](Activations.select(a))
 
-    implicit def convert[T <: java.lang.Number](a: JActivation[T]): Activation[T] = Activation(a)
+    implicit def convert[T <: java.lang.Number](a: JActivation[T]): Activation[T] = Activation[T](a)
 }

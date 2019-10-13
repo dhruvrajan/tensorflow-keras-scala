@@ -1,6 +1,4 @@
 package org.tensorflow.keras.scala
-
-import scala.language.implicitConversions
 import org.tensorflow.keras.layers.{Dense, Flatten, Input, Layers => JLayers}
 
 
