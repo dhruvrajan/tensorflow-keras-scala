@@ -1,7 +1,7 @@
 import org.tensorflow.keras.activations.Activations
 import org.tensorflow.keras.examples.fashionMnist.FashionMNISTKeras
-import org.tensorflow.keras.models.{Model, Sequential}
-import org.tensorflow.keras.scala.Layers
+import org.tensorflow.keras.models.Sequential
+import org.tensorflow.keras.scala.{Layers, Model}
 
 object Main {
 
@@ -14,6 +14,8 @@ object Main {
       Layers.dense(10, Activations.softmax)
     )
 
-    FashionMNISTKeras.train(model)
+
+    FashionMNISTKeras.train(model.self)
+
   }
 }
