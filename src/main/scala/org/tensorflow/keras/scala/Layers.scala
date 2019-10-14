@@ -5,7 +5,7 @@ import org.tensorflow.keras.layers.{Dense, Flatten, Input, Layers => JLayers}
 object Layers {
     def input(firstDim: Long, units: Long*): Input = JLayers.input(firstDim, units: _*)
 
-    def flatten: Int => Flatten = JLayers.flatten
+    def flatten: () => Flatten = JLayers.flatten
 
     def dense(units: Int, 
         activation: Activation[java.lang.Float] = Dense.Options.DEFAULT_ACTIVATION,

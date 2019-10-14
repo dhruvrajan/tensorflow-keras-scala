@@ -15,7 +15,7 @@ import scala.util.Using
 object Main {
   val model: Model[java.lang.Float] = Sequential.of(
     Layers.input(28, 28),
-    Layers.flatten(28 * 28),
+    Layers.flatten(),
     Layers.dense(128, activation = relu),
     Layers.dense(10, activation = softmax)
   )
@@ -23,19 +23,17 @@ object Main {
   def train(model: Model[java.lang.Float]): Model[java.lang.Float] = {
     Using.resource(new Graph()) { graph => {
       val tf: Ops = Ops.create(graph)
-      // Compile Model
       model.compile(tf, optimizer = sgd, loss = sparseCategoricalCrossentropy, metrics = List(accuracy))
 
       val data: Pair[GraphLoader[java.lang.Float], GraphLoader[java.lang.Float]] = FashionMNIST.graphLoaders2D()
       // GraphLoader objects contain AutoCloseable `Tensors`.
       Using.resources(data.first(), data.second()) { (train, test) => {
-        // Fit Model
         model.fit(tf, train, test, epochs = 10, batchSize = 100)
       }
       }
     }
     }
-    // Output Model
+
     model
   }
 

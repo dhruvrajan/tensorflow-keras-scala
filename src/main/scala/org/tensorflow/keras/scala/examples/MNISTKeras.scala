@@ -16,7 +16,7 @@ import scala.util.Using
 object MNISTKeras {
   val model: Model[java.lang.Float] = Sequential.of(
     Layers.input(28, 28),
-    Layers.flatten(28 * 28),
+    Layers.flatten(),
     Layers.dense(128, activation = relu),
     Layers.dense(10, activation = softmax)
   )

@@ -10,7 +10,8 @@ import org.tensorflow.keras.losses.Losses.sparseCategoricalCrossentropy
 import org.tensorflow.keras.metrics.Metrics.accuracy
 import org.tensorflow.keras.models.Sequential
 import org.tensorflow.keras.optimizers.Optimizers.sgd
-import org.tensorflow.keras.scala.{Layers, Model}
+import org.tensorflow.keras.scala.Layers.{dense, flatten, input}
+import org.tensorflow.keras.scala.Model
 import org.tensorflow.op.Ops
 import org.tensorflow.utils.Pair
 
@@ -18,10 +19,10 @@ import scala.util.Using
 
 object FashionMNISTKeras {
   val model: Model[JFloat] = Sequential.of(
-    Layers.input(28, 28),
-    Layers.flatten(28 * 28),
-    Layers.dense(128, activation = relu),
-    Layers.dense(10, activation = softmax)
+    input(28, 28),
+    flatten(),
+    dense(128, activation = relu),
+    dense(10, activation = softmax)
   )
 
   def train(model: Model[JFloat]): Model[JFloat] = {
