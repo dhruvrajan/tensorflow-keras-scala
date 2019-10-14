@@ -1,7 +1,8 @@
+package org.tensorflow.keras.scala.examples
 import org.tensorflow.Graph
 import org.tensorflow.data.GraphLoader
 import org.tensorflow.keras.activations.Activations.{relu, softmax}
-import org.tensorflow.keras.datasets.FashionMNIST
+import org.tensorflow.keras.datasets.MNIST
 import org.tensorflow.keras.losses.Losses.sparseCategoricalCrossentropy
 import org.tensorflow.keras.metrics.Metrics.accuracy
 import org.tensorflow.keras.models.Sequential
@@ -12,7 +13,7 @@ import org.tensorflow.utils.Pair
 
 import scala.util.Using
 
-object Main {
+object MNISTKeras {
   val model: Model[java.lang.Float] = Sequential.of(
     Layers.input(28, 28),
     Layers.flatten(28 * 28),
@@ -26,7 +27,7 @@ object Main {
       // Compile Model
       model.compile(tf, optimizer = sgd, loss = sparseCategoricalCrossentropy, metrics = List(accuracy))
 
-      val data: Pair[GraphLoader[java.lang.Float], GraphLoader[java.lang.Float]] = FashionMNIST.graphLoaders2D()
+      val data: Pair[GraphLoader[java.lang.Float], GraphLoader[java.lang.Float]] = MNIST.graphLoaders2D()
       // GraphLoader objects contain AutoCloseable `Tensors`.
       Using.resources(data.first(), data.second()) { (train, test) => {
         // Fit Model

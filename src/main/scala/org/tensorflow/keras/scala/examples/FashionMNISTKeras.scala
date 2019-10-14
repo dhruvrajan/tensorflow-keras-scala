@@ -1,3 +1,5 @@
+package org.tensorflow.keras.scala.examples
+
 import org.tensorflow.Graph
 import org.tensorflow.data.GraphLoader
 import org.tensorflow.keras.activations.Activations.{relu, softmax}
@@ -12,7 +14,7 @@ import org.tensorflow.utils.Pair
 
 import scala.util.Using
 
-object Main {
+object FashionMNISTKeras {
   val model: Model[java.lang.Float] = Sequential.of(
     Layers.input(28, 28),
     Layers.flatten(28 * 28),
