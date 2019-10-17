@@ -1,7 +1,7 @@
 Tensorflow Keras (Scala)
 -----
 
-This repository contains a Scala wrapper for tensorflow-keras-java; an implementation of
+This repository contains a Scala wrapper for [Tensorflow Keras Java](https://github.com/dhruvrajan/tensorflow-keras-java); an implementation of
 the high-level Keras API for training deep learning models. Using the scala wrapper allows
 for a more concise representation of Keras model training, with syntax very close to that of 
 the Python API.
