@@ -3,15 +3,20 @@ import org.tensorflow.keras.layers.{Dense, Flatten, Input, Layers => JLayers}
 
 
 object Layers {
-    def input(firstDim: Long, units: Long*): Input = JLayers.input(firstDim, units: _*)
+    object defaults {
+        lazy val dense: Dense.Options = Dense.Options.defaults()
+    }
 
-    def flatten: () => Flatten = JLayers.flatten
+    def input[T <: Number](firstDim: Long, units: Long*): Input[T] = JLayers.input[T](firstDim, units: _*)
 
-    def dense(units: Int, 
-        activation: Activation[java.lang.Float] = Dense.Options.DEFAULT_ACTIVATION,
-        kernelInitializer: Initializer[java.lang.Float] = Dense.Options.DEFAULT_KERNEL_INITIALIZER,
-        biasInitializer: Initializer[java.lang.Float] = Dense.Options.DEFAULT_BIAS_INITIALIZER): Dense = {
-    
-        JLayers.dense(units, activation.self, kernelInitializer.self, biasInitializer.self)
+    def flatten[T <: Number](): Flatten[T] = JLayers.flatten[T]
+
+    def dense[T <: Number](units: Int,
+        activation: Activation[T] = defaults.dense.getActivation[T],
+        kernelInitializer: Initializer = defaults.dense.getBiasInitializer,
+        biasInitializer: Initializer = defaults.dense.getKernelInitializer): Dense[T] = {
+
+
+        JLayers.dense[T](units, activation.self, kernelInitializer.self, biasInitializer.self)
     }
 }

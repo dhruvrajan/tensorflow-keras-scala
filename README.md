@@ -24,12 +24,34 @@ model.fit(X_train, y_train, val_data=(X_val, y_val), epochs=10, batch_size=100)
 
 *Scala*:
 ```scala
+package org.tensorflow.keras.scala.examples
+
+import java.lang.{Float => JFloat}
+
+import org.tensorflow.Graph
+import org.tensorflow.data.GraphLoader
+import org.tensorflow.keras.activations.Activations.{relu, softmax}
+import org.tensorflow.keras.datasets.FashionMNIST
+import org.tensorflow.keras.initializers.Initializers.{randomNormal, zeros}
+import org.tensorflow.keras.losses.Losses.sparseCategoricalCrossentropy
+import org.tensorflow.keras.metrics.Metrics.accuracy
+import org.tensorflow.keras.models.Sequential
+import org.tensorflow.keras.optimizers.Optimizers.sgd
+import org.tensorflow.keras.scala.Layers.{dense, flatten, input}
+import org.tensorflow.keras.scala.Model
+import org.tensorflow.op.Ops
+import org.tensorflow.utils.Pair
+
+import scala.util.Using
+
 object FashionMNISTKeras {
-  val model: Model[JFloat] = Sequential.of(
+
+  val model: Model[JFloat] = Sequential.of[JFloat](
+    classOf[JFloat],
     input(28, 28),
     flatten(),
-    dense(128, activation = relu),
-    dense(10, activation = softmax)
+    dense(128, activation = relu, kernelInitializer = randomNormal, biasInitializer = zeros),
+    dense(10, activation = softmax, kernelInitializer = randomNormal, biasInitializer = zeros)
   )
 
   def train(model: Model[JFloat]): Model[JFloat] = {
@@ -48,7 +70,7 @@ object FashionMNISTKeras {
   }
 
   def main(args: Array[String]): Unit = {
-    train(model)
+    train(model.self)
   }
 }
 ```

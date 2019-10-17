@@ -1,13 +1,14 @@
 package org.tensorflow.keras.scala
 
-import scala.language.implicitConversions
 import org.tensorflow.keras.activations.{Activations, Activation => JActivation}
 
+import scala.language.implicitConversions
 
-case class Activation[T <: java.lang.Number](self: JActivation[T])
+
+case class Activation[T <: Number](self: JActivation[T])
 
 object Activation {
-    implicit def convert(a: Activations): Activation[java.lang.Float] = Activation[java.lang.Float](Activations.select(a))
+    implicit def convert[T <: Number](a: Activations): Activation[T] = Activation(Activations.select(a))
 
-    implicit def convert[T <: java.lang.Number](a: JActivation[T]): Activation[T] = Activation[T](a)
+    implicit def convert[T <: Number](a: JActivation[T]): Activation[T] = Activation[T](a)
 }
