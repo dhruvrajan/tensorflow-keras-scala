@@ -5,6 +5,7 @@ import java.lang.{Float => JFloat}
 import org.tensorflow.Graph
 import org.tensorflow.data.GraphLoader
 import org.tensorflow.keras.activations.Activations.{relu, softmax}
+import org.tensorflow.keras.callbacks.Callbacks
 import org.tensorflow.keras.datasets.FashionMNIST
 import org.tensorflow.keras.initializers.Initializers.{randomNormal, zeros}
 import org.tensorflow.keras.losses.Losses.sparseCategoricalCrossentropy
@@ -20,8 +21,7 @@ import scala.util.Using
 
 object FashionMNISTKeras {
 
-  val model: Model[JFloat] = Sequential.of[JFloat](
-    classOf[JFloat],
+  val model: Model[JFloat] = Sequential.of[JFloat](classOf[JFloat],
     input(28, 28),
     flatten(),
     dense(128, activation = relu, kernelInitializer = randomNormal, biasInitializer = zeros),
@@ -36,7 +36,7 @@ object FashionMNISTKeras {
       val data: Pair[GraphLoader[JFloat], GraphLoader[JFloat]] = FashionMNIST.graphLoaders2D()
       // GraphLoader objects contain AutoCloseable `Tensors`.
       Using.resources(data.first(), data.second()) { (train, test) => {
-        model.fit(tf, train, test, epochs = 10, batchSize = 100)
+        model.fit(tf, train, test, epochs = 10, batchSize = 100, callbacks = List(Callbacks.baseCallback))
       }}
     }}
 

@@ -7,6 +7,5 @@ case class Initializer(self: JInitializer)
 
 object Initializer {
     implicit def convert(a: Initializers): Initializer = Initializer(Initializers.select(a))
-1
     implicit def convert(a: JInitializer): Initializer = Initializer(a)
 }

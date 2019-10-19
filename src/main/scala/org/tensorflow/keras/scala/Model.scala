@@ -1,20 +1,20 @@
 package org.tensorflow.keras.scala
 
 import org.tensorflow.data.GraphLoader
-import org.tensorflow.keras.losses.Losses
-import org.tensorflow.keras.metrics.Metrics
-import org.tensorflow.keras.models.Model.FitOptions
-
-import scala.language.implicitConversions
+import org.tensorflow.keras.models.Model.{CompileOptions, FitOptions}
 import org.tensorflow.keras.models.{Model => JModel}
-import org.tensorflow.keras.optimizers.Optimizers
 import org.tensorflow.op.Ops
+
+import scala.jdk.javaapi.CollectionConverters
+import scala.language.implicitConversions
 
 case class Model[T <: java.lang.Number](self: JModel[T]) {
 
-  def compile(tf: Ops, optimizer: Optimizer[T] = Optimizers.sgd,
-              loss: Loss = Losses.sparseCategoricalCrossentropy,
-              metrics: Seq[Metric] = List(Metrics.accuracy)): Unit = {
+  lazy val compileDefaults: CompileOptions = CompileOptions.defaults()
+  def compile(tf: Ops, optimizer: Optimizer[T] = compileDefaults.getOptimizer[T],
+              loss: Loss = compileDefaults.getLoss,
+              metrics: Seq[Metric]
+                = CollectionConverters.asScala(compileDefaults.getMetrics).toSeq.map(Metric.convert)): Unit = {
     val compileOptionsBuilder: JModel.CompileOptions.Builder = JModel.CompileOptions.builder()
       .setOptimizer(optimizer.self)
       .setLoss(loss.self)
@@ -26,9 +26,18 @@ case class Model[T <: java.lang.Number](self: JModel[T]) {
   lazy val fitDefaults: FitOptions = FitOptions.defaults();
   def fit(tf: Ops, train: GraphLoader[T], test: GraphLoader[T],
           epochs: Int = fitDefaults.getEpochs,
-          batchSize: Int = fitDefaults.getBatchSize): Unit = {
+          batchSize: Int = fitDefaults.getBatchSize,
+          callbacks: Seq[Callback] =
+            CollectionConverters.asScala(fitDefaults.getCallbacks).toSeq.map(Callback.convert)): Unit = {
 
-    self.fit(tf, train, test, JModel.FitOptions.builder().setEpochs(epochs).setBatchSize(batchSize).build())
+
+    val fitOptionsBuilder: JModel.FitOptions.Builder = JModel.FitOptions.builder()
+        .setEpochs(epochs)
+        .setBatchSize(batchSize)
+
+    callbacks.foreach((callback: Callback) => fitOptionsBuilder.addCallback(callback.self))
+
+    self.fit(tf, train, test, fitOptionsBuilder.build())
   }
 
 }
