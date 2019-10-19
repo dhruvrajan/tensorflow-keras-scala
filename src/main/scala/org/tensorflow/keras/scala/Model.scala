@@ -10,11 +10,15 @@ import scala.language.implicitConversions
 
 case class Model[T <: java.lang.Number](self: JModel[T]) {
 
-  lazy val compileDefaults: CompileOptions = CompileOptions.defaults()
-  def compile(tf: Ops, optimizer: Optimizer[T] = compileDefaults.getOptimizer[T],
-              loss: Loss = compileDefaults.getLoss,
+  object defaults {
+    lazy val compile: CompileOptions = CompileOptions.defaults()
+    lazy val fit: FitOptions = FitOptions.defaults()
+  }
+
+  def compile(tf: Ops, optimizer: Optimizer[T] = defaults.compile.getOptimizer[T],
+              loss: Loss = defaults.compile.getLoss,
               metrics: Seq[Metric]
-                = CollectionConverters.asScala(compileDefaults.getMetrics).toSeq.map(Metric.convert)): Unit = {
+                = CollectionConverters.asScala(defaults.compile.getMetrics).toSeq.map(Metric.convert)): Unit = {
     val compileOptionsBuilder: JModel.CompileOptions.Builder = JModel.CompileOptions.builder()
       .setOptimizer(optimizer.self)
       .setLoss(loss.self)
@@ -23,12 +27,11 @@ case class Model[T <: java.lang.Number](self: JModel[T]) {
     self.compile(tf, compileOptionsBuilder.build());
   }
 
-  lazy val fitDefaults: FitOptions = FitOptions.defaults();
   def fit(tf: Ops, train: GraphLoader[T], test: GraphLoader[T],
-          epochs: Int = fitDefaults.getEpochs,
-          batchSize: Int = fitDefaults.getBatchSize,
+          epochs: Int = defaults.fit.getEpochs,
+          batchSize: Int = defaults.fit.getBatchSize,
           callbacks: Seq[Callback] =
-            CollectionConverters.asScala(fitDefaults.getCallbacks).toSeq.map(Callback.convert)): Unit = {
+            CollectionConverters.asScala(defaults.fit.getCallbacks).toSeq.map(Callback.convert)): Unit = {
 
 
     val fitOptionsBuilder: JModel.FitOptions.Builder = JModel.FitOptions.builder()
