@@ -14,8 +14,8 @@ import org.tensorflow.keras.models.Sequential
 import org.tensorflow.keras.optimizers.Optimizers.sgd
 import org.tensorflow.keras.scala.Layers.{dense, flatten, input}
 import org.tensorflow.keras.scala.Model
+import org.tensorflow.keras.scala.Pair._
 import org.tensorflow.op.Ops
-import org.tensorflow.utils.Pair
 
 import scala.util.Using
 
@@ -33,9 +33,9 @@ object FashionMNISTKeras {
       val tf: Ops = Ops.create(graph)
       model.compile(tf, optimizer = sgd, loss = sparseCategoricalCrossentropy, metrics = List(accuracy))
 
-      val data: Pair[GraphLoader[JFloat], GraphLoader[JFloat]] = FashionMNIST.graphLoaders2D()
+      val (trainLoader, testLoader): (GraphLoader[JFloat], GraphLoader[JFloat]) = FashionMNIST.graphLoaders2D()
       // GraphLoader objects contain AutoCloseable `Tensors`.
-      Using.resources(data.first(), data.second()) { (train, test) => {
+      Using.resources(trainLoader, testLoader) { (train, test) => {
         model.fit(tf, train, test, epochs = 10, batchSize = 100, callbacks = List(Callbacks.baseCallback))
       }}
     }}
