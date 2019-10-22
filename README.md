@@ -55,18 +55,18 @@ object FashionMNISTKeras {
   )
 
   def train(model: Model[JFloat]): Model[JFloat] = {
-    Using.resource(new Graph()) { graph => {
-      val tf: Ops = Ops.create(graph)
-      model.compile(tf, optimizer = sgd, loss = sparseCategoricalCrossentropy, metrics = List(accuracy))
-
-      val data: Pair[GraphLoader[JFloat], GraphLoader[JFloat]] = FashionMNIST.graphLoaders2D()
-      // GraphLoader objects contain AutoCloseable `Tensors`.
-      Using.resources(data.first(), data.second()) { (train, test) => {
-        model.fit(tf, train, test, epochs = 10, batchSize = 100)
+      Using.resource(new Graph()) { graph => {
+        implicit val tf: Ops = Ops.create(graph)
+        model.compile(optimizer = sgd, loss = sparseCategoricalCrossentropy, metrics = List(accuracy))
+  
+        val (trainLoader, testLoader): (GraphLoader[JFloat], GraphLoader[JFloat]) = FashionMNIST.graphLoaders2D()
+        // GraphLoader objects contain AutoCloseable `Tensors`.
+        Using.resources(trainLoader, testLoader) { (train, test) => {
+          model.fit(train, test, epochs = 10, batchSize = 100)
+        }}
       }}
-    }}
-
-    model
+  
+      model
   }
 
   def main(args: Array[String]): Unit = {
