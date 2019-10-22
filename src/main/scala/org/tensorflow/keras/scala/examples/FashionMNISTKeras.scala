@@ -4,7 +4,7 @@ import java.lang.{Float => JFloat}
 
 import org.tensorflow.Graph
 import org.tensorflow.data.GraphLoader
-import org.tensorflow.keras.activations.Activations.{relu, softmax}
+import org.tensorflow.keras.activations.Activations.{relu, softmax, sigmoid}
 import org.tensorflow.keras.callbacks.Callbacks
 import org.tensorflow.keras.datasets.FashionMNIST
 import org.tensorflow.keras.initializers.Initializers.{randomNormal, zeros}
@@ -25,18 +25,18 @@ object FashionMNISTKeras {
     input(28, 28),
     flatten(),
     dense(128, activation = relu, kernelInitializer = randomNormal, biasInitializer = zeros),
-    dense(10, activation = softmax, kernelInitializer = randomNormal, biasInitializer = zeros)
+    dense(10, activation = softmax, kernelInitializer = randomNormal, biasInitializer = zeros),
   )
 
   def train(model: Model[JFloat]): Model[JFloat] = {
     Using.resource(new Graph()) { graph => {
-      val tf: Ops = Ops.create(graph)
-      model.compile(tf, optimizer = sgd, loss = sparseCategoricalCrossentropy, metrics = List(accuracy))
+      implicit val tf: Ops = Ops.create(graph)
+      model.compile(optimizer = sgd, loss = sparseCategoricalCrossentropy, metrics = List(accuracy))
 
       val (trainLoader, testLoader): (GraphLoader[JFloat], GraphLoader[JFloat]) = FashionMNIST.graphLoaders2D()
       // GraphLoader objects contain AutoCloseable `Tensors`.
       Using.resources(trainLoader, testLoader) { (train, test) => {
-        model.fit(tf, train, test, epochs = 10, batchSize = 100, callbacks = List(Callbacks.baseCallback))
+        model.fit(train, test, epochs = 10, batchSize = 100)
       }}
     }}
 

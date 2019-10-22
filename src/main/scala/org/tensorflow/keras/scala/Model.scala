@@ -15,10 +15,11 @@ case class Model[T <: java.lang.Number](self: JModel[T]) {
     lazy val fit: FitOptions = FitOptions.defaults()
   }
 
-  def compile(tf: Ops, optimizer: Optimizer[T] = defaults.compile.getOptimizer[T],
+  def compile(optimizer: Optimizer[T] = defaults.compile.getOptimizer[T],
               loss: Loss = defaults.compile.getLoss,
               metrics: Seq[Metric]
-                = CollectionConverters.asScala(defaults.compile.getMetrics).toSeq.map(Metric.convert)): Unit = {
+                = CollectionConverters.asScala(defaults.compile.getMetrics).toSeq.map(Metric.convert))
+             (implicit tf: Ops) : Unit = {
     val compileOptionsBuilder: JModel.CompileOptions.Builder = JModel.CompileOptions.builder()
       .setOptimizer(optimizer.self)
       .setLoss(loss.self)
@@ -27,11 +28,12 @@ case class Model[T <: java.lang.Number](self: JModel[T]) {
     self.compile(tf, compileOptionsBuilder.build());
   }
 
-  def fit(tf: Ops, train: GraphLoader[T], test: GraphLoader[T],
+  def fit(train: GraphLoader[T], test: GraphLoader[T],
           epochs: Int = defaults.fit.getEpochs,
           batchSize: Int = defaults.fit.getBatchSize,
           callbacks: Seq[Callback] =
-            CollectionConverters.asScala(defaults.fit.getCallbacks).toSeq.map(Callback.convert)): Unit = {
+            CollectionConverters.asScala(defaults.fit.getCallbacks).toSeq.map(Callback.convert))
+         (implicit tf: Ops): Unit = {
 
 
     val fitOptionsBuilder: JModel.FitOptions.Builder = JModel.FitOptions.builder()
@@ -40,7 +42,7 @@ case class Model[T <: java.lang.Number](self: JModel[T]) {
 
     callbacks.foreach((callback: Callback) => fitOptionsBuilder.addCallback(callback.self))
 
-    self.fit(tf, train, test, fitOptionsBuilder.build())
+    self.fit(tf,train, test, fitOptionsBuilder.build())
   }
 
 }
